@@ -4,5 +4,5 @@
 
 namespace PolimorphicJsonSample;
 
-public sealed record class MultipleChoiceQuestion(string Text, string[] Choices)
+public sealed record class MultipleChoiceQuestion(string Text, string[] Choices, string[] Answers)
   : QuestionBase(Text, QuestionType.Text);

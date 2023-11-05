@@ -4,5 +4,5 @@
 
 namespace PolimorphicJsonSample;
 
-public sealed record class TextQuestion(string Text)
+public sealed record class TextQuestion(string Text, string? Answer)
   : QuestionBase(Text, QuestionType.Text);

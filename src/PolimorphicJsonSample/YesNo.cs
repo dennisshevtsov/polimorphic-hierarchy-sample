@@ -4,5 +4,9 @@
 
 namespace PolimorphicJsonSample;
 
-public sealed record class SingleChoiceQuestion(string Text, string[] Choices, string? Answer)
-  : QuestionBase(Text, QuestionType.Text);
+public enum YesNo : byte
+{
+  None = 0,
+  Yes = 1,
+  No = 2,
+}
