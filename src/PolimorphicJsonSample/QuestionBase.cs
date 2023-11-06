@@ -13,4 +13,23 @@ namespace PolimorphicJsonSample;
 [JsonDerivedType(typeof(SingleChoiceQuestion)  , (int)QuestionType.SingleChoice  )]
 public abstract record class QuestionBase(
   [property: JsonPropertyOrder(1)] string Text,
-  [property: JsonIgnore          ] QuestionType Type);
+  [property: JsonIgnore          ] QuestionType Type)
+{
+  protected static bool Equals(string[] a, string[] b)
+  {
+    if (a.Length != b.Length)
+    {
+      return false;
+    }
+
+    for (int i = 0; i < a.Length; i++)
+    {
+      if (a[i] != b[i])
+      {
+        return false;
+      }
+    }
+
+    return true;
+  }
+}
