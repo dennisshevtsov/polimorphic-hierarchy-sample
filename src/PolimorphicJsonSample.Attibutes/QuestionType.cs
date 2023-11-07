@@ -6,8 +6,8 @@ namespace PolimorphicJsonSample.Attibutes;
 
 public enum QuestionType : byte
 {
-  Text = 0,
-  YesNo = 1,
+  Text           = 0,
+  YesNo          = 1,
   MultipleChoice = 2,
-  SingleChoice = 3,
+  SingleChoice   = 3,
 }

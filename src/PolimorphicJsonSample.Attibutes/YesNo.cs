@@ -7,6 +7,6 @@ namespace PolimorphicJsonSample.Attibutes;
 public enum YesNo : byte
 {
   None = 0,
-  Yes = 1,
-  No = 2,
+  Yes  = 1,
+  No   = 2,
 }
