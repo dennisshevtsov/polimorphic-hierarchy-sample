@@ -4,16 +4,16 @@
 
 using System.Text.Json.Serialization;
 
-namespace PolimorphicJsonSample.Attibutes;
+namespace PolimorphicJsonSample.Attibute;
 
-public sealed record class SingleChoiceQuestion(
+public sealed record class MultipleChoiceQuestion(
   string Text,
   [property: JsonPropertyOrder(2)] string[] Choices,
-  [property: JsonPropertyOrder(3)] string? Answer)
-  : QuestionBase(Text, QuestionType.SingleChoice)
+  [property: JsonPropertyOrder(3)] string[] Answers)
+  : QuestionBase(Text, QuestionType.MultipleChoice)
 {
 #pragma warning disable CS8851 // Record defines 'Equals' but not 'GetHashCode'.
-  public bool Equals(SingleChoiceQuestion? other)
+  public bool Equals(MultipleChoiceQuestion? other)
 #pragma warning restore CS8851 // Record defines 'Equals' but not 'GetHashCode'.
   {
     if (other is null)
@@ -36,7 +36,7 @@ public sealed record class SingleChoiceQuestion(
       return false;
     }
 
-    if (Answer != other.Answer)
+    if (!QuestionBase.Equals(Answers, other.Answers))
     {
       return false;
     }

@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 // See LICENSE in the project root for license information.
 
-namespace PolimorphicJsonSample.Attibutes;
+namespace PolimorphicJsonSample.Attibute;
 
 public enum QuestionType : byte
 {

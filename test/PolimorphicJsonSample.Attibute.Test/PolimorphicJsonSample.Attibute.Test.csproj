@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\PolimorphicJsonSample.Attibutes\PolimorphicJsonSample.Attibutes.csproj" />
+    <ProjectReference Include="..\..\src\PolimorphicJsonSample.Attibute\PolimorphicJsonSample.Attibute.csproj" />
   </ItemGroup>
 
 </Project>

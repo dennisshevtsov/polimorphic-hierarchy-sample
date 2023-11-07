@@ -5,7 +5,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace PolimorphicJsonSample.Attibutes.Test;
+namespace PolimorphicJsonSample.Attibute.Test;
 
 [TestClass]
 public sealed class AttibuteSerializationTest
