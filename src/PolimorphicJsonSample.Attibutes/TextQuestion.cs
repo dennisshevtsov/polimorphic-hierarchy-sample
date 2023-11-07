@@ -4,7 +4,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace PolimorphicJsonSample;
+namespace PolimorphicJsonSample.Attibutes;
 
-public sealed record class YesNoQuestion(string Text, [property: JsonPropertyOrder(2)] YesNo Answer)
-  : QuestionBase(Text, QuestionType.YesNo);
+public sealed record class TextQuestion(string Text, [property: JsonPropertyOrder(2)] string? Answer)
+  : QuestionBase(Text, QuestionType.Text);
