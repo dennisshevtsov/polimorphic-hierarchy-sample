@@ -10,6 +10,24 @@ namespace PolimorphicJsonSample.ContractModel.Test;
 [TestClass]
 public sealed class ContractModelSerializationTest
 {
+  [TestMethod]
+  public void Serialize_ArrayOfBases_ArrayOfDerivedObjectsSerialized()
+  {
+    // Arrange
+    QuestionBase[] questions = ContractModelSerializationTest.CreateTestQuestions();
+
+    // Act
+    string actual = JsonSerializer.Serialize(questions, new JsonSerializerOptions
+    {
+      PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      TypeInfoResolver = new QuestionJsonTypeInfoResolver(),
+    });
+
+    // Assert
+    string expected = Regex.Replace(ContractModelSerializationTest.CreateTestJson(), "\\s+", "");
+    Assert.AreEqual(expected, actual);
+  }
+
   private static string CreateTestJson() => @"
   [
     {
