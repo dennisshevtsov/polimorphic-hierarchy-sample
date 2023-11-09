@@ -9,19 +9,18 @@ namespace PolimorphicJsonSample.ContractModel;
 
 public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
 {
-  public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
+  private static readonly Dictionary<string, int> _propertyOrderDictionary = new(StringComparer.OrdinalIgnoreCase)
   {
-    JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
+    { nameof(QuestionBase.Text)             , 1 },
+    { nameof(MultipleChoiceQuestion.Choices), 2 },
+    { nameof(MultipleChoiceQuestion.Answers), 3 },
+    { nameof(SingleChoiceQuestion.Answer)   , 3 },
+  };
 
-    if (jsonTypeInfo.Type != typeof(QuestionBase))
-    {
-      return jsonTypeInfo;
-    }
-
-    jsonTypeInfo.PolymorphismOptions = new JsonPolymorphismOptions
-    {
-      TypeDiscriminatorPropertyName = "type",
-      DerivedTypes =
+  private static readonly JsonPolymorphismOptions? _jsonPolymorphismOptions = new()
+  {
+    TypeDiscriminatorPropertyName = "type",
+    DerivedTypes =
       {
         new JsonDerivedType
         (
@@ -44,8 +43,151 @@ public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
           typeDiscriminator: (int)QuestionType.SingleChoice
         ),
       },
-    };
+  };
+
+  public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
+  {
+    JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
+
+    if (!TryConfigureTextQuestion(jsonTypeInfo) &&
+        !TryConfigureYesNoQuestion(jsonTypeInfo) &&
+        !TryConfigureMultipleChoiceQuestion(jsonTypeInfo) &&
+        !TryConfigureSingleChoiceQuestion(jsonTypeInfo))
+    {
+      TryConfigureQuestionBase(jsonTypeInfo);
+    }
 
     return jsonTypeInfo;
+  }
+
+  private static bool TryConfigureQuestionBase(JsonTypeInfo jsonTypeInfo)
+  {
+    if (jsonTypeInfo.Type != typeof(QuestionBase))
+    {
+      return false;
+    }
+
+    jsonTypeInfo.PolymorphismOptions = _jsonPolymorphismOptions;
+    return true;
+  }
+
+  private static bool TryConfigureTextQuestion(JsonTypeInfo jsonTypeInfo)
+  {
+    if (jsonTypeInfo.Type != typeof(TextQuestion))
+    {
+      return false;
+    }
+
+    for (int i = 0; i < jsonTypeInfo.Properties.Count; i++)
+    {
+      JsonPropertyInfo property = jsonTypeInfo.Properties[i];
+
+      if (property.Name.Equals(nameof(TextQuestion.Type), StringComparison.OrdinalIgnoreCase))
+      {
+        property.ShouldSerialize = (_, _) => false;
+      }
+      else if (property.Name.Equals(nameof(TextQuestion.Text), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 0;
+      }
+      else if (property.Name.Equals(nameof(TextQuestion.Answer), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 1;
+      }
+    }
+    
+    return true;
+  }
+
+  private static bool TryConfigureYesNoQuestion(JsonTypeInfo jsonTypeInfo)
+  {
+    if (jsonTypeInfo.Type != typeof(YesNoQuestion))
+    {
+      return false;
+    }
+
+    for (int i = 0; i < jsonTypeInfo.Properties.Count; i++)
+    {
+      JsonPropertyInfo property = jsonTypeInfo.Properties[i];
+
+      if (property.Name.Equals(nameof(YesNoQuestion.Type), StringComparison.OrdinalIgnoreCase))
+      {
+        property.ShouldSerialize = (_, _) => false;
+      }
+      else if (property.Name.Equals(nameof(YesNoQuestion.Text), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 0;
+      }
+      else if (property.Name.Equals(nameof(YesNoQuestion.Answer), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 1;
+      }
+    }
+
+    return true;
+  }
+
+  private static bool TryConfigureMultipleChoiceQuestion(JsonTypeInfo jsonTypeInfo)
+  {
+    if (jsonTypeInfo.Type != typeof(MultipleChoiceQuestion))
+    {
+      return false;
+    }
+
+    for (int i = 0; i < jsonTypeInfo.Properties.Count; i++)
+    {
+      JsonPropertyInfo property = jsonTypeInfo.Properties[i];
+
+      if (property.Name.Equals(nameof(MultipleChoiceQuestion.Type), StringComparison.OrdinalIgnoreCase))
+      {
+        property.ShouldSerialize = (_, _) => false;
+      }
+      else if (property.Name.Equals(nameof(MultipleChoiceQuestion.Text), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 0;
+      }
+      else if (property.Name.Equals(nameof(MultipleChoiceQuestion.Choices), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 2;
+      }
+      else if (property.Name.Equals(nameof(MultipleChoiceQuestion.Answers), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 3;
+      }
+    }
+
+    return true;
+  }
+
+  private static bool TryConfigureSingleChoiceQuestion(JsonTypeInfo jsonTypeInfo)
+  {
+    if (jsonTypeInfo.Type != typeof(SingleChoiceQuestion))
+    {
+      return false;
+    }
+
+    for (int i = 0; i < jsonTypeInfo.Properties.Count; i++)
+    {
+      JsonPropertyInfo property = jsonTypeInfo.Properties[i];
+
+      if (property.Name.Equals(nameof(SingleChoiceQuestion.Type), StringComparison.OrdinalIgnoreCase))
+      {
+        property.ShouldSerialize = (_, _) => false;
+      }
+      else if (property.Name.Equals(nameof(SingleChoiceQuestion.Text), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 0;
+      }
+      else if (property.Name.Equals(nameof(SingleChoiceQuestion.Choices), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 2;
+      }
+      else if (property.Name.Equals(nameof(SingleChoiceQuestion.Answer), StringComparison.OrdinalIgnoreCase))
+      {
+        property.Order = 3;
+      }
+    }
+
+    return true;
   }
 }
