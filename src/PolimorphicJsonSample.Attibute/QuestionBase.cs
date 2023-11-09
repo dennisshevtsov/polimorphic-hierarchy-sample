@@ -4,7 +4,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace PolimorphicJsonSample;
+namespace PolimorphicJsonSample.Attibute;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(TextQuestion)          , (int)QuestionType.Text          )]

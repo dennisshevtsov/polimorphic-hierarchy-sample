@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 // See LICENSE in the project root for license information.
 
-namespace PolimorphicJsonSample;
+namespace PolimorphicJsonSample.Attibute;
 
 public enum QuestionType : byte
 {
-  Text = 0,
-  YesNo = 1,
+  Text           = 0,
+  YesNo          = 1,
   MultipleChoice = 2,
-  SingleChoice = 3,
+  SingleChoice   = 3,
 }

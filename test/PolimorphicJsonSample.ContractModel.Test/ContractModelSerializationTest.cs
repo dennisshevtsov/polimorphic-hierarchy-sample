@@ -5,25 +5,26 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-namespace PolimorphicJsonSample.Test;
+namespace PolimorphicJsonSample.ContractModel.Test;
 
 [TestClass]
-public sealed class AttibuteSerializationTest
+public sealed class ContractModelSerializationTest
 {
   [TestMethod]
   public void Serialize_ArrayOfBases_ArrayOfDerivedObjectsSerialized()
   {
     // Arrange
-    QuestionBase[] questions = AttibuteSerializationTest.CreateTestQuestions();
+    QuestionBase[] questions = ContractModelSerializationTest.CreateTestQuestions();
 
     // Act
     string actual = JsonSerializer.Serialize(questions, new JsonSerializerOptions
     {
-       PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      TypeInfoResolver = new QuestionJsonTypeInfoResolver(),
     });
 
     // Assert
-    string expected = Regex.Replace(AttibuteSerializationTest.CreateTestJson(), "\\s+", "");
+    string expected = Regex.Replace(ContractModelSerializationTest.CreateTestJson(), "\\s+", "");
     Assert.AreEqual(expected, actual);
   }
 
@@ -31,16 +32,17 @@ public sealed class AttibuteSerializationTest
   public void Deserialize_Json_ArrayOfDerivedObjectsDeserialized()
   {
     // Arrange
-    string json = AttibuteSerializationTest.CreateTestJson();
+    string json = ContractModelSerializationTest.CreateTestJson();
 
     // Act
     QuestionBase[]? actual = JsonSerializer.Deserialize<QuestionBase[]>(json, new JsonSerializerOptions
     {
-       PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      TypeInfoResolver = new QuestionJsonTypeInfoResolver(),
     });
 
     // Assert
-    QuestionBase[] expected = AttibuteSerializationTest.CreateTestQuestions();
+    QuestionBase[] expected = ContractModelSerializationTest.CreateTestQuestions();
 
     Assert.IsNotNull(actual);
     Assert.AreEqual(expected.Length, actual.Length);
