@@ -17,34 +17,6 @@ public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
     { nameof(SingleChoiceQuestion.Answer)   , 3 },
   };
 
-  private static readonly JsonPolymorphismOptions? _jsonPolymorphismOptions = new()
-  {
-    TypeDiscriminatorPropertyName = "type",
-    DerivedTypes =
-      {
-        new JsonDerivedType
-        (
-          derivedType      : typeof(TextQuestion),
-          typeDiscriminator: (int)QuestionType.Text
-        ),
-        new JsonDerivedType
-        (
-          derivedType      : typeof(YesNoQuestion),
-          typeDiscriminator: (int)QuestionType.YesNo
-        ),
-        new JsonDerivedType
-        (
-          derivedType      : typeof(MultipleChoiceQuestion),
-          typeDiscriminator: (int)QuestionType.MultipleChoice
-        ),
-        new JsonDerivedType
-        (
-          derivedType      : typeof(SingleChoiceQuestion),
-          typeDiscriminator: (int)QuestionType.SingleChoice
-        ),
-      },
-  };
-
   public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
   {
     JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
@@ -60,6 +32,34 @@ public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
     return jsonTypeInfo;
   }
 
+  private static JsonPolymorphismOptions? GetjsonPolymorphismOptions() => new()
+  {
+    TypeDiscriminatorPropertyName = "type",
+    DerivedTypes =
+    {
+      new JsonDerivedType
+      (
+        derivedType      : typeof(TextQuestion),
+        typeDiscriminator: (int)QuestionType.Text
+      ),
+      new JsonDerivedType
+      (
+        derivedType      : typeof(YesNoQuestion),
+        typeDiscriminator: (int)QuestionType.YesNo
+      ),
+      new JsonDerivedType
+      (
+        derivedType      : typeof(MultipleChoiceQuestion),
+        typeDiscriminator: (int)QuestionType.MultipleChoice
+      ),
+      new JsonDerivedType
+      (
+        derivedType      : typeof(SingleChoiceQuestion),
+        typeDiscriminator: (int)QuestionType.SingleChoice
+      ),
+    },
+  };
+
   private static bool TryConfigureQuestionBase(JsonTypeInfo jsonTypeInfo)
   {
     if (jsonTypeInfo.Type != typeof(QuestionBase))
@@ -67,7 +67,7 @@ public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
       return false;
     }
 
-    jsonTypeInfo.PolymorphismOptions = _jsonPolymorphismOptions;
+    jsonTypeInfo.PolymorphismOptions = GetjsonPolymorphismOptions();
     return true;
   }
 

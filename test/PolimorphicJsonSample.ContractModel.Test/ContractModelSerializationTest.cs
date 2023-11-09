@@ -28,6 +28,31 @@ public sealed class ContractModelSerializationTest
     Assert.AreEqual(expected, actual);
   }
 
+  [TestMethod]
+  public void Deserialize_Json_ArrayOfDerivedObjectsDeserialized()
+  {
+    // Arrange
+    string json = ContractModelSerializationTest.CreateTestJson();
+
+    // Act
+    QuestionBase[]? actual = JsonSerializer.Deserialize<QuestionBase[]>(json, new JsonSerializerOptions
+    {
+      PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+      TypeInfoResolver = new QuestionJsonTypeInfoResolver(),
+    });
+
+    // Assert
+    QuestionBase[] expected = ContractModelSerializationTest.CreateTestQuestions();
+
+    Assert.IsNotNull(actual);
+    Assert.AreEqual(expected.Length, actual.Length);
+
+    for (int i = 0; i < expected.Length; i++)
+    {
+      Assert.AreEqual(expected[i], actual[i]);
+    }
+  }
+
   private static string CreateTestJson() => @"
   [
     {
