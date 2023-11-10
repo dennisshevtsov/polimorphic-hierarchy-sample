@@ -9,14 +9,6 @@ namespace PolimorphicJsonSample.ContractModel;
 
 public sealed class QuestionJsonTypeInfoResolver : DefaultJsonTypeInfoResolver
 {
-  private static readonly Dictionary<string, int> _propertyOrderDictionary = new(StringComparer.OrdinalIgnoreCase)
-  {
-    { nameof(QuestionBase.Text)             , 1 },
-    { nameof(MultipleChoiceQuestion.Choices), 2 },
-    { nameof(MultipleChoiceQuestion.Answers), 3 },
-    { nameof(SingleChoiceQuestion.Answer)   , 3 },
-  };
-
   public override JsonTypeInfo GetTypeInfo(Type type, JsonSerializerOptions options)
   {
     JsonTypeInfo jsonTypeInfo = base.GetTypeInfo(type, options);
